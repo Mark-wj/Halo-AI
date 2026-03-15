@@ -1,6 +1,6 @@
 import offlineService from './offlineService';
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const BASE = import.meta.env.VITE_API_URL || 'https://halo-backend-c1cl.onrender.com';
 const API_BASE_URL = `${BASE}/api`;
 const EVIDENCE_BASE_URL = `${BASE}/api/evidence`;
 
