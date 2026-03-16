@@ -205,16 +205,16 @@ const LandingPage = ({ navigateTo, mlHealthy }) => {
         </div>
       </header>
 
-      <div className="flex-1 flex flex-col justify-center px-4 py-12 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center mb-12 animate-fade-in">
+      <div className="flex-1 flex flex-col justify-center px-4 py-12 xl:py-20 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Zap className="h-4 w-4" />
             <span>{t('aiPoweredProtection')}</span>
           </div>
-          <h2 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          <h2 className="text-5xl sm:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             {t('youAreNotAlone')}
           </h2>
-          <p className="text-xl text-gray-600 mb-4 max-w-2xl mx-auto">
+          <p className="text-xl xl:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto">
             {t('subtitle')}
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mt-6">
@@ -227,65 +227,65 @@ const LandingPage = ({ navigateTo, mlHealthy }) => {
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8 mb-8">
           <button
             onClick={() => navigateTo('sos')}
-            className="group relative bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            className="group relative bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white p-8 xl:p-12 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
           >
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
             <div className="relative z-10 flex flex-col items-center space-y-4">
               <div className="bg-white/20 p-4 rounded-full group-hover:scale-110 transition-transform">
                 <Phone className="h-12 w-12" />
               </div>
-              <h3 className="text-2xl font-bold">{t('emergency')}</h3>
+              <h3 className="text-2xl xl:text-3xl font-bold">{t('emergency')}</h3>
               <p className="text-red-100 text-center text-sm">{t('alertContacts')}</p>
             </div>
           </button>
 
           <button
             onClick={() => navigateTo('ai-chatbot')}
-            className="group relative bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            className="group relative bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white p-8 xl:p-12 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
           >
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
             <div className="relative z-10 flex flex-col items-center space-y-4">
               <div className="bg-white/20 p-4 rounded-full group-hover:scale-110 transition-transform">
                 <Bot className="h-12 w-12" />
               </div>
-              <h3 className="text-2xl font-bold">{t('aiAssistant')}</h3>
+              <h3 className="text-2xl xl:text-3xl font-bold">{t('aiAssistant')}</h3>
               <p className="text-purple-100 text-center text-sm">{t('aiAssistantSub')}</p>
             </div>
           </button>
 
           <button
             onClick={() => navigateTo('risk-assessment')}
-            className="group relative bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            className="group relative bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white p-8 xl:p-12 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
           >
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
             <div className="relative z-10 flex flex-col items-center space-y-4">
               <div className="bg-white/20 p-4 rounded-full group-hover:scale-110 transition-transform">
                 <Activity className="h-12 w-12" />
               </div>
-              <h3 className="text-2xl font-bold">{t('quickCheck')}</h3>
+              <h3 className="text-2xl xl:text-3xl font-bold">{t('quickCheck')}</h3>
               <p className="text-indigo-100 text-center text-sm">{t('quickCheckSub')}</p>
             </div>
           </button>
 
           <button
             onClick={() => navigateTo('anonymous-report')}
-            className="group relative bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            className="group relative bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-8 xl:p-12 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
           >
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
             <div className="relative z-10 flex flex-col items-center space-y-4">
               <div className="bg-white/20 p-4 rounded-full group-hover:scale-110 transition-transform">
                 <Users className="h-12 w-12" />
               </div>
-              <h3 className="text-2xl font-bold">{t('report')}</h3>
+              <h3 className="text-2xl xl:text-3xl font-bold">{t('report')}</h3>
               <p className="text-blue-100 text-center text-sm">{t('reportSub')}</p>
             </div>
           </button>
         </div>
 
-        <div className="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-6 mb-12">
           <button
             onClick={() => navigateTo('resources')}
             className="flex items-center justify-between p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-100 group"
@@ -351,28 +351,28 @@ const LandingPage = ({ navigateTo, mlHealthy }) => {
           </button>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl p-8 xl:p-12 mb-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold text-purple-600 mb-1">170</div>
+              <div className="text-4xl font-bold text-purple-600 mb-1">170</div>
               <div className="text-sm text-gray-600">Women killed in 2024</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-red-600 mb-1">&lt;2min</div>
+              <div className="text-4xl font-bold text-red-600 mb-1">&lt;2min</div>
               <div className="text-sm text-gray-600">Average response</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-green-600 mb-1">87%</div>
+              <div className="text-4xl font-bold text-green-600 mb-1">87%</div>
               <div className="text-sm text-gray-600">ML accuracy</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-blue-600 mb-1">24/7</div>
+              <div className="text-4xl font-bold text-blue-600 mb-1">24/7</div>
               <div className="text-sm text-gray-600">Always available</div>
             </div>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl shadow-lg p-6 border border-purple-100">
+        <div className="max-w-6xl mx-auto bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl shadow-lg p-6 border border-purple-100">
           <div className="flex items-start space-x-3">
             <Heart className="h-6 w-6 text-purple-600 flex-shrink-0 mt-1" />
             <div>
@@ -411,7 +411,7 @@ const AIChatbot = ({ navigateTo, userData, setUserData }) => {
 
   const startChatbot = async () => {
     try {
-      const response = await fetch('https://halo-backend-c1cl.onrender.com/api/chatbot/start', {
+      const response = await fetch('http://localhost:5000/api/chatbot/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -436,7 +436,7 @@ const AIChatbot = ({ navigateTo, userData, setUserData }) => {
     setMessages(prev => [...prev, { type: 'user', text: answer }]);
     setLoading(true);
     try {
-      const response = await fetch('https://halo-backend-c1cl.onrender.com/api/chatbot/respond', {
+      const response = await fetch('http://localhost:5000/api/chatbot/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: sessionId, question_id: currentQuestion.id, answer })
@@ -1005,7 +1005,7 @@ const ResourcesPage = ({ navigateTo, userLocation, userData, mlHealthy }) => {
           <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 mb-6 shadow-xl">
             <div className="flex items-center space-x-3 mb-4 text-white">
               <Brain className="h-8 w-8" />
-              <div><h3 className="text-2xl font-bold">Recommended For You</h3><p className="text-sm opacity-90">AI-matched based on your needs and location</p></div>
+              <div><h3 className="text-2xl xl:text-3xl font-bold">Recommended For You</h3><p className="text-sm opacity-90">AI-matched based on your needs and location</p></div>
             </div>
             <div className="space-y-3">
               {smartResources.slice(0, 3).map((resource, idx) => (
