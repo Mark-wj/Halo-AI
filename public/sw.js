@@ -17,7 +17,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET, non-http(s) requests (fixes chrome-extension error)
+  // Skip non-GET, non-http(s) 
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith('http')) return;
 

@@ -445,7 +445,7 @@ const AIChatbot = ({ navigateTo, userData, setUserData }) => {
     setMessages(prev => [...prev, { type: 'user', text: answer }]);
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/chatbot/respond', {
+      const response = await fetch('https://halo-backend-c1cl.onrender.com/api/chatbot/respond', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: sessionId, question_id: currentQuestion.id, answer })
@@ -1520,9 +1520,7 @@ const SettingsPage = ({ navigateTo }) => {
   const handleInstall = async () => {
     if (isIOS) { setShowIOSGuide(true); return; }
     if (!installPrompt) {
-      alert(`To install:
-• Chrome: Menu (⋮) → "Add to Home screen"
-• Edge: Menu → Apps → Install`);
+      alert(`To install:\n• Chrome: Menu (⋮) → "Add to Home screen"\n• Edge: Menu → Apps → Install`);
       return;
     }
     installPrompt.prompt();
