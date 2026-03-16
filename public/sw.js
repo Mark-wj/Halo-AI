@@ -1,12 +1,8 @@
-// HALO Service Worker — disguised as Calculator SW
 const CACHE_NAME = 'calc-v1';
 
-// Cache app shell on install
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
-      cache.addAll(['/', '/index.html'])
-    )
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(['/', '/index.html']))
   );
   self.skipWaiting();
 });
@@ -20,14 +16,19 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Network-first strategy — fall back to cache when offline
 self.addEventListener('fetch', (event) => {
+  // Skip non-GET, non-http(s) requests (fixes chrome-extension error)
   if (event.request.method !== 'GET') return;
+  if (!event.request.url.startsWith('http')) return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        // Only cache same-origin and CORS-safe responses
+        if (response && response.status === 200 && response.type !== 'opaque') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
         return response;
       })
       .catch(() => caches.match(event.request))

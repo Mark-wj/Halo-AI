@@ -420,7 +420,7 @@ const AIChatbot = ({ navigateTo, userData, setUserData }) => {
 
   const startChatbot = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/chatbot/start', {
+      const response = await fetch('https://halo-backend-c1cl.onrender.com/api/chatbot/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
