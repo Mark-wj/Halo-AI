@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Shield, MessageSquare, AlertTriangle, User, Users, Phone, MapPin, Heart, X, Check, Clock, Navigation, FileText, Camera, Mic, Lock, Eye, EyeOff, Menu, ChevronRight, AlertCircle, Star, Zap, Activity, Brain, Sparkles, TrendingUp, Send, Bot, Mail, Globe } from 'lucide-react';
+import { Shield, MessageSquare, AlertTriangle, User, Users, Phone, MapPin, Heart, X, Check, Clock, Navigation, FileText, Camera, Mic, Lock, Eye, EyeOff, Menu, ChevronRight, AlertCircle, Star, Zap, Activity, Brain, Sparkles, TrendingUp, Send, Bot, Mail, Globe, Settings, ToggleLeft, ToggleRight, KeyRound } from 'lucide-react';
 import sosAlertSystem from '../services/sosAlerts';
 import realResourcesService from '../services/realResources';
 import EvidenceVaultFixed from './components/evidence/EvidenceVaultFixed';
@@ -131,6 +131,8 @@ const HaloApp = () => {
         return <SafetyPlanBuilder navigateTo={navigateTo} />;
       case 'court-tracker':
         return <CourtCaseTracker navigateTo={navigateTo} />;
+      case 'settings':
+        return <SettingsPage navigateTo={navigateTo} />;
       default:
         return <LandingPage navigateTo={navigateTo} mlHealthy={mlHealthy} />;
     }
@@ -194,6 +196,13 @@ const LandingPage = ({ navigateTo, mlHealthy }) => {
                 </div>
               )}
               <LanguageSwitcher compact />
+              <button
+                onClick={() => navigateTo('settings')}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                title="Settings"
+              >
+                <Settings className="h-6 w-6 text-gray-600" />
+              </button>
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -1456,6 +1465,251 @@ const AnonymousReportPage = ({ navigateTo }) => {
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+};
+
+
+const SettingsPage = ({ navigateTo }) => {
+  const [disguiseEnabled, setDisguiseEnabled] = useState(disguiseModeService.getIsEnabled());
+  const [pin, setPin] = useState(disguiseModeService.getPin());
+  const [newPin, setNewPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [saved, setSaved] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [showIOSGuide, setShowIOSGuide] = useState(false);
+
+  useEffect(() => {
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(ios);
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    setIsInstalled(standalone);
+
+    const handler = (e) => { e.preventDefault(); setInstallPrompt(e); };
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', () => setIsInstalled(true));
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const toggleDisguise = () => {
+    const next = !disguiseEnabled;
+    if (next) {
+      disguiseModeService.enable(pin);
+    } else {
+      disguiseModeService.disable();
+    }
+    setDisguiseEnabled(next);
+    flash();
+  };
+
+  const savePin = () => {
+    if (newPin.length < 4) { setPinError('PIN must be at least 4 digits'); return; }
+    if (newPin !== confirmPin) { setPinError('PINs do not match'); return; }
+    disguiseModeService.setPin(newPin);
+    setPin(newPin);
+    setNewPin(''); setConfirmPin(''); setPinError('');
+    flash();
+  };
+
+  const flash = () => { setSaved(true); setTimeout(() => setSaved(false), 2000); };
+
+  const handleInstall = async () => {
+    if (isIOS) { setShowIOSGuide(true); return; }
+    if (!installPrompt) {
+      alert(`To install:
+• Chrome: Menu (⋮) → "Add to Home screen"
+• Edge: Menu → Apps → Install`);
+      return;
+    }
+    installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') setInstallPrompt(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+      <div className="max-w-2xl mx-auto">
+
+        {/* Header */}
+        <div className="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+          <button onClick={() => navigateTo('landing')} className="text-gray-500 hover:text-gray-800 mb-4 flex items-center space-x-2 text-sm">
+            <span>←</span><span>Back to Home</span>
+          </button>
+          <div className="flex items-center space-x-3">
+            <div className="bg-gradient-to-br from-slate-700 to-slate-800 p-3 rounded-xl">
+              <Settings className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
+              <p className="text-gray-500 text-sm">Privacy &amp; security options</p>
+            </div>
+          </div>
+          {saved && (
+            <div className="mt-4 flex items-center space-x-2 text-green-700 bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+              <Check className="h-5 w-5" /><span className="font-medium text-sm">Saved successfully</span>
+            </div>
+          )}
+        </div>
+
+        {/* PWA Install */}
+        <div className="bg-white rounded-2xl p-6 mb-4 shadow-lg">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2.5 rounded-xl">
+              <Phone className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">Install App</h3>
+              <p className="text-xs text-gray-500">Add to your home screen for quick access</p>
+            </div>
+          </div>
+
+          {isInstalled ? (
+            <div className="flex items-center space-x-2 text-green-700 bg-green-50 rounded-xl px-4 py-3">
+              <Check className="h-5 w-5" />
+              <span className="text-sm font-medium">App is installed on your device</span>
+            </div>
+          ) : (
+            <>
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                Install HALO on your home screen. It will appear as <strong>"Calculator"</strong> for your privacy — no one will know what it is.
+              </p>
+              <button
+                onClick={handleInstall}
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center space-x-2 transition-colors"
+              >
+                <Phone className="h-5 w-5" />
+                <span>{isIOS ? 'How to Install on iPhone/iPad' : 'Install App'}</span>
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Disguise Mode */}
+        <div className="bg-white rounded-2xl p-6 mb-4 shadow-lg">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="bg-gradient-to-br from-gray-700 to-gray-900 p-2.5 rounded-xl">
+              <Lock className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-gray-900">Disguise Mode</h3>
+              <p className="text-xs text-gray-500">Hide the app behind a calculator</p>
+            </div>
+          </div>
+
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5">
+            <p className="text-sm text-amber-800 leading-relaxed">
+              When enabled, the app opens as a <strong>fully working calculator</strong>. Type your secret PIN into the calculator to reveal HALO. No one else will know what the app does.
+            </p>
+          </div>
+
+          {/* Toggle */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-5">
+            <div>
+              <p className="font-semibold text-gray-900">Enable Disguise</p>
+              <p className="text-xs text-gray-500 mt-0.5">App shows calculator on open</p>
+            </div>
+            <button onClick={toggleDisguise} className="transition-transform active:scale-95">
+              {disguiseEnabled
+                ? <ToggleRight className="h-10 w-10 text-green-500" />
+                : <ToggleLeft className="h-10 w-10 text-gray-300" />
+              }
+            </button>
+          </div>
+
+          {/* Current PIN display */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-5">
+            <div className="flex items-center space-x-3">
+              <KeyRound className="h-5 w-5 text-gray-500" />
+              <div>
+                <p className="font-medium text-gray-900 text-sm">Current secret PIN</p>
+                <p className="text-xs text-gray-400">Type this into the calculator to unlock</p>
+              </div>
+            </div>
+            <span className="font-mono font-bold text-xl text-gray-900 tracking-widest bg-white border border-gray-200 px-4 py-1.5 rounded-lg">{pin}</span>
+          </div>
+
+          {/* Change PIN */}
+          <div className="border-t border-gray-100 pt-5">
+            <p className="text-sm font-semibold text-gray-700 mb-3">Change Secret PIN</p>
+            {pinError && (
+              <div className="mb-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-2">{pinError}</div>
+            )}
+            <input
+              type="password"
+              inputMode="numeric"
+              placeholder="New PIN (4–6 digits)"
+              maxLength={6}
+              value={newPin}
+              onChange={e => { setNewPin(e.target.value.replace(/\D/g,'')); setPinError(''); }}
+              className="w-full p-3 border-2 border-gray-200 rounded-xl text-center font-mono text-xl tracking-widest mb-3 focus:border-slate-500 focus:outline-none"
+            />
+            <input
+              type="password"
+              inputMode="numeric"
+              placeholder="Confirm new PIN"
+              maxLength={6}
+              value={confirmPin}
+              onChange={e => { setConfirmPin(e.target.value.replace(/\D/g,'')); setPinError(''); }}
+              className="w-full p-3 border-2 border-gray-200 rounded-xl text-center font-mono text-xl tracking-widest mb-3 focus:border-slate-500 focus:outline-none"
+            />
+            <button
+              onClick={savePin}
+              disabled={newPin.length < 4}
+              className="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-xl font-semibold disabled:opacity-40 transition-colors"
+            >
+              Save New PIN
+            </button>
+          </div>
+        </div>
+
+        {/* Test disguise */}
+        {disguiseEnabled && (
+          <div className="bg-white rounded-2xl p-6 mb-4 shadow-lg">
+            <h3 className="font-bold text-gray-900 mb-2">Test Disguise Mode</h3>
+            <p className="text-sm text-gray-600 mb-4">Reload the app to see the calculator. Type your PIN <strong>{pin}</strong> to get back in.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-gradient-to-r from-gray-700 to-gray-800 text-white py-3 rounded-xl font-semibold"
+            >
+              🧮 Preview as Calculator
+            </button>
+          </div>
+        )}
+
+        {/* iOS install guide modal */}
+        {showIOSGuide && (
+          <div className="fixed inset-0 bg-black/70 flex items-end justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl mb-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900">Install on iPhone / iPad</h3>
+                <button onClick={() => setShowIOSGuide(false)}><X className="h-5 w-5 text-gray-500" /></button>
+              </div>
+              <ol className="space-y-4 text-sm text-gray-700">
+                <li className="flex items-start space-x-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">1</span>
+                  <p>Tap the <strong>Share button</strong> <span className="text-blue-600">⎙</span> at the bottom of Safari (the square with an arrow pointing up)</p>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">2</span>
+                  <p>Scroll down and tap <strong>"Add to Home Screen"</strong></p>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">3</span>
+                  <p>The name will show as <strong>"Calculator"</strong> — tap <strong>Add</strong></p>
+                </li>
+              </ol>
+              <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-3">
+                <p className="text-xs text-amber-800">⚠️ Must be opened in <strong>Safari</strong> — Chrome on iOS does not support home screen install.</p>
+              </div>
+              <button onClick={() => setShowIOSGuide(false)} className="mt-4 w-full bg-blue-600 text-white py-3 rounded-xl font-semibold">Got it</button>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
